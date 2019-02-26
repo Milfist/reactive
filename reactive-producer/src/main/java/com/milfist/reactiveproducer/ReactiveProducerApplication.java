@@ -1,4 +1,4 @@
-package com.milfist.producer;
+package com.milfist.reactiveproducer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

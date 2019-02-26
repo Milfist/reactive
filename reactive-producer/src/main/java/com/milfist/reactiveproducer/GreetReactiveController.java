@@ -1,4 +1,4 @@
-package com.milfist.producer;
+package com.milfist.reactiveproducer;
 
 import org.reactivestreams.Publisher;
 import org.springframework.http.MediaType;

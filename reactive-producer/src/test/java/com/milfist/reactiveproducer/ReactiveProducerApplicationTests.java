@@ -1,4 +1,4 @@
-package com.milfist.producer;
+package com.milfist.reactiveproducer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;

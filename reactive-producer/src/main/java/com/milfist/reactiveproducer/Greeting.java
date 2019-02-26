@@ -1,4 +1,4 @@
-package com.milfist.producer;
+package com.milfist.reactiveproducer;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
