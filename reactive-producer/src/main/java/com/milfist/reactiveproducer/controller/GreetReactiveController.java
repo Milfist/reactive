@@ -1,4 +1,4 @@
-package com.milfist.reactiveproducer;
+package com.milfist.reactiveproducer.controller;
 
 import com.milfist.reactiveproducer.domain.Greeting;
 import org.reactivestreams.Publisher;
