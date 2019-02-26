@@ -1,5 +1,6 @@
 package com.milfist.reactiveproducer;
 
+import com.milfist.reactiveproducer.domain.Greeting;
 import org.reactivestreams.Publisher;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
