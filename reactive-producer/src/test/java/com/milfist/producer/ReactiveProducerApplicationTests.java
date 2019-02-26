@@ -1,4 +1,4 @@
-package com.milfist.reactive;
+package com.milfist.producer;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -7,7 +7,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
-public class ReactiveApplicationTests {
+public class ReactiveProducerApplicationTests {
 
   @Test
   public void contextLoads() {

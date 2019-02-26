@@ -1,13 +1,13 @@
-package com.milfist.reactive;
+package com.milfist.producer;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class ReactiveApplication {
+public class ReactiveProducerApplication {
 
   public static void main(String[] args) {
-    SpringApplication.run(ReactiveApplication.class, args);
+    SpringApplication.run(ReactiveProducerApplication.class, args);
   }
 
 }
