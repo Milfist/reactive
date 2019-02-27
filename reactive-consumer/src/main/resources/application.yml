@@ -1,2 +1,15 @@
 server:
   port: 8081
+
+reactive-producer:
+  server: "http://localhost:8080"
+
+logging:
+  level:
+#    root: INFO
+    org:
+      springframework:
+        web: INFO
+    com:
+      milfist: TRACE
+  file: logs/log.log

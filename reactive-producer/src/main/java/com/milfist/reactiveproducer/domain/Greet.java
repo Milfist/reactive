@@ -5,6 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class Greeting {
+public class Greet {
   private String message;
 }
