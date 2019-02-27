@@ -13,10 +13,6 @@ import reactor.core.publisher.Mono;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
-import java.util.stream.Stream;
 
 @RestController
 @Slf4j
@@ -58,37 +54,6 @@ public class GreetConsumerController {
 
     logTime(start);
   }
-
-  //TODO: Mirar solución
-  private void callMonoConsumerInLoop() {
-    Instant start = Instant.now();
-
-//    for (int i = 1; i <= 5; i++) {
-//      client.get()
-//          .uri("/producer/mono")
-//          .retrieve()
-//          .bodyToMono(Greet.class)
-//          .subscribe(greet -> log.info("------------> " + greet.getMessage()),
-//              err -> log.error("pues eso...error"),
-//              () -> logTime(start));
-//    }
-
-    List<Mono<Greet>> list = Stream.of(1, 2, 3, 4, 5)
-        .map(i -> client.get()
-            .uri("/person/{id}")
-            .retrieve()
-            .bodyToMono(Greet.class))
-        .collect(Collectors.toList());
-
-    Mono.when(list).block();
-
-
-    logTime(start);
-
-    return
-  }
-
-
 
   /**
    *
