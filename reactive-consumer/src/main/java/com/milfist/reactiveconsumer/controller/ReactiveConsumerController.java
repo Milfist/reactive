@@ -2,6 +2,7 @@ package com.milfist.reactiveconsumer.controller;
 
 import com.milfist.reactiveconsumer.domain.Basic;
 import com.milfist.reactiveconsumer.domain.Greet;
+import com.milfist.reactiveconsumer.domain.Person;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -44,11 +45,25 @@ public class ReactiveConsumerController {
   }
 
   @GetMapping("/merge")
-  public Flux<ResponseEntity<Basic>> getMergeObjectByTwoCalls() {
+  public Flux<Basic> getMergeObjectByTwoCalls() {
+
+    Flux<Greet> greets = client.get()
+        .uri("/greets")
+        .retrieve()
+        .bodyToFlux(Greet.class);
+
+    Flux<Person> persons = client.get()
+        .uri("/persons")
+        .retrieve()
+        .bodyToFlux(Person.class);
 
 
+    Flux<Basic> basic = greets.
+        flatMap(greet -> persons.
+            map(person -> Basic.create(greet, person))
+        );
 
-
+    return basic;
   }
 
   private void callFluxConsumer() {
@@ -106,19 +121,3 @@ public class ReactiveConsumerController {
   }
 
 }
-
-
-//  @Autowired
-//  private WebClient.Builder webClientBuilder;
-//
-//  @GetMapping("/{id}/with-accounts")
-//  public Mono findByIdWithAccounts(@PathVariable("id") String id) {
-//    <span class="skimlinks-unlinked">LOGGER.info("findByIdWithAccounts</span>{}", id);
-//    Flux accounts = <span class="skimlinks-unlinked">webClientBuilder.build().get().uri("http://account-service/customer/{customer</span>d).retrieve().bodyToFlux(<span class="skimlinks-unlinked">Account.class</span>);
-//    return accounts
-//        .collectList()
-//        .map(a -> new Customer(a))
-//        .mergeWith(repository.findById(id))
-//        .collectList()
-//        .map(CustomerMapper::map);
-//  }

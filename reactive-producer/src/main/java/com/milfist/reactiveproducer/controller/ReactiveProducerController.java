@@ -1,31 +1,21 @@
 package com.milfist.reactiveproducer.controller;
 
 import com.milfist.reactiveproducer.domain.Greet;
-import com.milfist.reactiveproducer.repository.GreetRepository;
-import com.milfist.reactiveproducer.repository.PersonRepository;
 import lombok.AllArgsConstructor;
-import org.reactivestreams.Publisher;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
-import reactor.util.function.Tuple2;
 
 import java.time.Duration;
 import java.time.Instant;
-import java.util.Optional;
-import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/producer")
 @AllArgsConstructor
 public class ReactiveProducerController {
-
-  private GreetRepository greetRepository;
-  private PersonRepository personRepository;
 
   /**
    * Generamos un flujo de saludos, del que tomamos 5 elementos con el momento actual.

@@ -9,14 +9,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Greet {
+public class Person {
   @Id
   private String id;
-  private String message;
-
-  public static Greet create(String message) {
-    Greet greet = new Greet();
-    greet.setMessage(message);
-    return greet;
-  }
+  private String name;
 }
