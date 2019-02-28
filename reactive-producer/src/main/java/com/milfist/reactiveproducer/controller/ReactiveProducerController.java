@@ -1,6 +1,9 @@
 package com.milfist.reactiveproducer.controller;
 
 import com.milfist.reactiveproducer.domain.Greet;
+import com.milfist.reactiveproducer.repository.GreetRepository;
+import com.milfist.reactiveproducer.repository.PersonRepository;
+import lombok.AllArgsConstructor;
 import org.reactivestreams.Publisher;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -18,7 +21,11 @@ import java.util.stream.Stream;
 
 @RestController
 @RequestMapping("/producer")
+@AllArgsConstructor
 public class ReactiveProducerController {
+
+  private GreetRepository greetRepository;
+  private PersonRepository personRepository;
 
   /**
    * Generamos un flujo de saludos, del que tomamos 5 elementos con el momento actual.
@@ -26,9 +33,9 @@ public class ReactiveProducerController {
    * @return Flux<Greet>
    */
   @GetMapping("/flux")
-  public Flux<Greet> greetingPublisher() {
+  public Flux<Greet> generateGreetFlux() {
     return Flux
-        .<Greet>generate(sink -> sink.next(new Greet("Hello " + Instant.now().toString())))
+        .<Greet>generate(sink -> sink.next(Greet.create("Hello " + Instant.now().toString())))
         .take(5)
         .delayElements(Duration.ofSeconds(1));
   }
@@ -40,25 +47,23 @@ public class ReactiveProducerController {
    * @return Un Publisher Mono para ser consumido.
    */
   @GetMapping("/mono")
-  public Mono<Greet> mono() {
+  public Mono<Greet> createGreetMono() {
     return Mono
-        .<Greet>create(sink -> sink.success(new Greet("Hola!! ")))
+        .<Greet>create(sink -> sink.success(Greet.create("Hola!! ")))
         .delayElement(Duration.ofSeconds(1));
   }
 
+  /**
+   * Generamos un flujo de saludos, del que tomamos 5 elementos con el momento actual.
+   * Retrasamos cada elemento 1 segundo.
+   * @return en forma de evento
+   */
   @GetMapping(value = "/publisher/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public Flux<Greet> sseGreetings() {
+  public Flux<Greet> generateGreetFluxAndReturnEvent() {
     return Flux
-        .<Greet>generate(sink -> sink.next(new Greet("Hello @" + Instant.now().toString())))
+        .<Greet>generate(sink -> sink.next(Greet.create("Hello @" + Instant.now().toString())))
         .take(5)
         .delayElements(Duration.ofSeconds(1));
-  }
-
-  @GetMapping(value = "/flux/sse", produces = MediaType.TEXT_EVENT_STREAM_VALUE)
-  public Flux<Greet> events() {
-    Flux<Greet> greetingFlux = Flux.fromStream(Stream.generate(() -> new Greet("Hello @" + Instant.now().toString())));
-    Flux<Long> durationFlux = Flux.interval(Duration.ofSeconds(1));
-    return Flux.zip(greetingFlux, durationFlux).map(Tuple2::getT1);
   }
 
   /**
@@ -71,5 +76,4 @@ public class ReactiveProducerController {
         .<Boolean>create(sink -> sink.success(Boolean.TRUE))
         .delayElement(Duration.ofSeconds(5));
   }
-
 }

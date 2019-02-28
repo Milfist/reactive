@@ -1,3 +1,18 @@
 server:
   port: 8080
 
+spring:
+  data:
+    mongodb:
+      uri: mongodb://127.0.0.1/reactive
+logging:
+  level:
+    com:
+      milfist: TRACE
+    org:
+      springframework:
+        web: INFO
+        data:
+          mongodb:
+            core:
+              ReactiveMongoTemplate: DEBUG

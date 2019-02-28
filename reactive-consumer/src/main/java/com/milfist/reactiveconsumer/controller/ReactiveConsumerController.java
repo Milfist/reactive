@@ -1,5 +1,6 @@
 package com.milfist.reactiveconsumer.controller;
 
+import com.milfist.reactiveconsumer.domain.Basic;
 import com.milfist.reactiveconsumer.domain.Greet;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -9,6 +10,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.time.Duration;
@@ -18,7 +20,7 @@ import java.time.Instant;
 @Slf4j
 @AllArgsConstructor
 @RequestMapping("/consumer")
-public class GreetConsumerController {
+public class ReactiveConsumerController {
 
   private WebClient client;
 
@@ -41,6 +43,14 @@ public class GreetConsumerController {
         .create(sink -> sink.success(new ResponseEntity<>(HttpStatus.ACCEPTED)));
   }
 
+  @GetMapping("/merge")
+  public Flux<ResponseEntity<Basic>> getMergeObjectByTwoCalls() {
+
+
+
+
+  }
+
   private void callFluxConsumer() {
     Instant start = Instant.now();
 
@@ -50,15 +60,11 @@ public class GreetConsumerController {
           .bodyToFlux(Greet.class)
           .subscribe(greet -> log.info("------------> " + greet.getMessage()),
               err -> log.error("pues eso...error"),
-              () -> logTime(start));
+              () -> logTime(start, "subscribe"));
 
-    logTime(start);
+    logTime(start, "function");
   }
 
-  /**
-   *
-   * @return
-   */
   private Mono<Greet> callMonoConsumer() {
     Instant start = Instant.now();
     //TODO: Hay que hay algo raro...devuelve el objeto con los datos del producer, aunque me suscriba y los cambie...
@@ -67,10 +73,10 @@ public class GreetConsumerController {
         .retrieve()
         .bodyToMono(Greet.class);
 
-    logTime(start);
+    logTime(start, "function");
 
     mono
-        .subscribe(greet -> greet.setMessage("menudo lio tengo..."),
+        .subscribe(greet -> greet.setMessage("menudo lio tengo...lo voy pillando"),
             err -> log.error("Error on Greet: " + err),
             () -> log.info("OK"));
 
@@ -95,8 +101,24 @@ public class GreetConsumerController {
 
   }
 
-  private static void logTime(Instant start) {
-    log.debug("Elapsed time: " + Duration.between(start, Instant.now()).toMillis() + "ms");
+  private static void logTime(Instant start, String when) {
+    log.debug("Elapsed time: " + when + " " + Duration.between(start, Instant.now()).toMillis() + "ms");
   }
 
 }
+
+
+//  @Autowired
+//  private WebClient.Builder webClientBuilder;
+//
+//  @GetMapping("/{id}/with-accounts")
+//  public Mono findByIdWithAccounts(@PathVariable("id") String id) {
+//    <span class="skimlinks-unlinked">LOGGER.info("findByIdWithAccounts</span>{}", id);
+//    Flux accounts = <span class="skimlinks-unlinked">webClientBuilder.build().get().uri("http://account-service/customer/{customer</span>d).retrieve().bodyToFlux(<span class="skimlinks-unlinked">Account.class</span>);
+//    return accounts
+//        .collectList()
+//        .map(a -> new Customer(a))
+//        .mergeWith(repository.findById(id))
+//        .collectList()
+//        .map(CustomerMapper::map);
+//  }
