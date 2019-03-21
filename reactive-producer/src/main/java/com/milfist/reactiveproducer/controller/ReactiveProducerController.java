@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
+import reactor.core.publisher.MonoSink;
 
 import java.time.Duration;
 import java.time.Instant;
@@ -63,7 +64,8 @@ public class ReactiveProducerController {
   @GetMapping(value = "/generate")
   public Mono<Boolean> generatePDF() {
     return Mono
-        .<Boolean>create(sink -> sink.success(Boolean.TRUE))
+//        .<Boolean>create(sink -> sink.success(Boolean.TRUE))
+        .<Boolean>create(MonoSink::success)
         .delayElement(Duration.ofSeconds(5));
   }
 }
